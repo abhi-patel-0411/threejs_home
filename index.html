@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0d10" />
+  <title>Modern Residence · 3D Walkthrough</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;1,400&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <canvas id="gl"></canvas>
+  <div id="fade"></div>
+
+  <!-- ===== Intro ===== -->
+  <section id="intro">
+    <div class="intro-bg" style="background-image:url('img/elevation.jpg')"></div>
+    <div class="intro-inner">
+      <div class="eyebrow">Immersive 3D Walkthrough</div>
+      <h1>Modern <em>Two-Story</em><br /><b>Residence</b></h1>
+      <p class="sub">Step inside before the first brick is laid. Explore every room — living, dining, kitchen, four bedrooms, balcony and roof garden — freely, in your browser.</p>
+      <div class="stats">
+        <div><b>2</b><span>Floors</span></div>
+        <div><b>4</b><span>Bedrooms</span></div>
+        <div><b>3.5</b><span>Baths</span></div>
+        <div><b>~245</b><span>m² built</span></div>
+      </div>
+      <div class="bar" id="bar"><i id="barFill"></i></div>
+      <div class="pct" id="pct">Loading model…</div>
+      <div class="cta">
+        <button id="enter" type="button" disabled>Start the tour</button>
+        <button id="enterAerial" type="button" class="ghost" disabled>Aerial view</button>
+      </div>
+      <div class="how">
+        <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> move</span>
+        <span><kbd>Mouse</kbd> look</span>
+        <span><kbd>Shift</kbd> run</span>
+        <span><kbd>Space</kbd> jump</span>
+        <span><kbd>V</kbd> aerial</span>
+        <span><kbd>N</kbd> day / night</span>
+        <span><kbd>M</kbd> map</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== HUD ===== -->
+  <div id="hud">
+    <div class="brand">
+      <div class="logo">MR</div>
+      <div><b>Modern Residence</b><small id="levelName">Ground Floor</small></div>
+    </div>
+
+    <div id="roomToast"><small>You are in</small><span id="roomName">Front Garden</span></div>
+
+    <nav id="dock">
+      <button data-act="rooms" class="dk" title="Rooms (R)"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg><span>Rooms</span></button>
+      <button data-act="walk" class="dk on" title="Walk mode"><svg viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M10 22l2-7 3 3v6m-5-10 1-4 4 2 3 3M8 12l2-4"/></svg><span>Walk</span></button>
+      <button data-act="aerial" class="dk" title="Aerial / dollhouse (V)"><svg viewBox="0 0 24 24"><path d="M12 2 3 7l9 5 9-5-9-5zm-9 10 9 5 9-5M3 17l9 5 9-5"/></svg><span>Aerial</span></button>
+      <button data-act="night" class="dk" title="Day / Night (N)"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><span id="dnLabel">Night</span></button>
+      <button data-act="plans" class="dk" title="Floor plans"><svg viewBox="0 0 24 24"><path d="M3 3h18v18H3zM3 12h8m0-9v6m4 12v-7h6"/></svg><span>Plans</span></button>
+      <button data-act="shot" class="dk" title="Screenshot (P)"><svg viewBox="0 0 24 24"><path d="M4 7h3l2-3h6l2 3h3v13H4z"/><circle cx="12" cy="13" r="4"/></svg><span>Photo</span></button>
+      <button data-act="quality" class="dk" title="Quality"><svg viewBox="0 0 24 24"><path d="M12 3v3m0 12v3M3 12h3m12 0h3M5.6 5.6l2.1 2.1m8.6 8.6 2.1 2.1M5.6 18.4l2.1-2.1m8.6-8.6 2.1-2.1"/><circle cx="12" cy="12" r="3.5"/></svg><span id="qLabel">High</span></button>
+      <button data-act="fs" class="dk" title="Fullscreen (F)"><svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5m11-5v5h-5"/></svg><span>Full</span></button>
+    </nav>
+
+    <aside id="rooms" class="panel">
+      <header>Jump to a room <button class="x" data-close="rooms">×</button></header>
+      <div class="grp"><h4>Outside</h4><div id="roomsOut"></div></div>
+      <div class="grp"><h4>Ground floor</h4><div id="rooms0"></div></div>
+      <div class="grp"><h4>Second floor</h4><div id="rooms1"></div></div>
+    </aside>
+
+    <div id="levels" class="seg">
+      <button data-lv="all" class="on">Full house</button>
+      <button data-lv="1">Second floor</button>
+      <button data-lv="0">Ground floor</button>
+    </div>
+
+    <div id="mapWrap"><canvas id="map" width="440" height="440"></canvas><div class="maplbl" id="mapLbl">Ground floor · click to jump</div></div>
+
+    <div id="cross"></div>
+    <div id="hint">Click to look around · <b>WASD</b> to move · <b>Shift</b> to run · <b>Esc</b> to release mouse</div>
+    <div id="stickHome"></div>
+    <div id="stick"><i></i></div>
+    <div id="fps"></div>
+  </div>
+
+  <div id="plans" class="modal">
+    <div class="modal-in">
+      <header>Architectural reference <button class="x" data-close="plans">×</button></header>
+      <div class="tabs"><button data-img="img/plan.png" class="on">Floor plans</button><button data-img="img/elevation.jpg">Front elevation</button></div>
+      <img id="planImg" src="img/plan.png" alt="Floor plans" />
+      <p>The 3D model is built to these drawings: open-plan living, dining and kitchen with a floating oak stair; guest suite and powder room below; master suite with walk-in closet and en-suite, family lounge, two bedrooms, bath, full-width balcony and roof garden above.</p>
+      <p style="font-size:12px">Furniture &amp; plants: Poly Haven (CC0). Trees, textures &amp; sky: reference villa assets.</p>
+      <a class="dl" href="models/house.glb" download>Download 3D model (.glb)</a>
+    </div>
+  </div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>

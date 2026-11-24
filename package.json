@@ -1,0 +1,30 @@
+{
+  "name": "modern-residence-3d",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build/export.mjs && vite build",
+    "model": "node build/export.mjs",
+    "dev": "vite",
+    "preview": "vite preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@gltf-transform/core": "^4.5.1",
+    "@gltf-transform/extensions": "^4.5.1",
+    "@gltf-transform/functions": "^4.5.1",
+    "draco3dgltf": "^1.5.9",
+    "jpeg-js": "^0.4.4",
+    "meshoptimizer": "^1.3.0",
+    "pngjs": "^7.0.0",
+    "sharp": "^0.35.5",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "vite": "^5.4.21"
+  }
+}
