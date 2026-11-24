@@ -7,7 +7,8 @@ ground/second floor plans, plus a website to walk through it with W A S D.
 ```
 npm install
 npm run dev        # http://localhost:5179
-npm run build      # regenerates the GLB, then builds the static site into dist/
+npm run build      # builds the static site into dist/ using the committed house.glb (what Vercel runs)
+npm run build:full # regenerates house.glb first; local only, needs the reference villa folder
 ```
 
 ## Controls

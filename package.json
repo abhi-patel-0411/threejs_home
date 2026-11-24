@@ -4,9 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "node build/export.mjs && vite build",
-    "model": "node build/export.mjs",
     "dev": "vite",
+    "build": "vite build",
+    "build:full": "node build/export.mjs && vite build",
+    "model": "node build/export.mjs",
     "preview": "vite preview"
   },
   "keywords": [],

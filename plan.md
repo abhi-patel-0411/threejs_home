@@ -72,7 +72,8 @@ Commands:
 npm install
 npm run model      # (A)-(F): regenerate house.glb + meta
 npm run dev        # (G): http://localhost:5179
-npm run build      # model + static site in dist/
+npm run build      # static site in dist/ using the committed house.glb (what Vercel runs)
+npm run build:full # (A)-(F) + site; local only, needs the reference villa folder
 ```
 
 ---
